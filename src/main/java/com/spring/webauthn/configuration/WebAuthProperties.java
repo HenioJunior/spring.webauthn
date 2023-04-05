@@ -1,4 +1,4 @@
-package com.spring.authn;
+package com.spring.webauthn.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

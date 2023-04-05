@@ -1,4 +1,4 @@
-package com.spring.authn;
+package com.spring.webauthn.user;
 
 import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.UserIdentity;

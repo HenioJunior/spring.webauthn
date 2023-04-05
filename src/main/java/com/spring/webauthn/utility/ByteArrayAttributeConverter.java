@@ -1,4 +1,4 @@
-package com.spring.authn;
+package com.spring.webauthn.utility;
 
 import com.yubico.webauthn.data.ByteArray;
 import jakarta.persistence.AttributeConverter;

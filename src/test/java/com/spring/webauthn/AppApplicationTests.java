@@ -1,10 +1,10 @@
-package com.spring.authn;
+package com.spring.webauthn;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthnApplicationTests {
+class AppApplicationTests {
 
 	@Test
 	void contextLoads() {

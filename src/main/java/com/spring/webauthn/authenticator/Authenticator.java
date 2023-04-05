@@ -1,5 +1,6 @@
-package com.spring.authn;
+package com.spring.webauthn.authenticator;
 
+import com.spring.webauthn.user.AppUser;
 import com.yubico.webauthn.RegistrationResult;
 import com.yubico.webauthn.data.AttestedCredentialData;
 import com.yubico.webauthn.data.AuthenticatorAttestationResponse;

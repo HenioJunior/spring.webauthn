@@ -226,5 +226,11 @@ O controlador da web para o aplicativo cria rotas e constrói os dados necessár
 - Cache de informações intermediárias necessárias para a execução segura de uma cerimônia (o desafio nonce).
 - Passando informações da cerimônia de criação da credencial do navegador para as classes de armazenamento de dados.
 
-Crie uma AuthControllerclasse:
+Crie uma classe AuthController;
+
+As cerimônias de registro e autenticação acontecem em duas etapas.</br>
+O cliente faz uma solicitação inicial ao servidor com algum identificador.</br>
+O código abaixo usa o nome de usuário, mas o identificador de usuário também funciona. Depois de solicitar ao usuário um nome de usuário exclusivo, o servidor cria um `PublicKeyCredentialCreationOptions`para registro, que contém o identificador do usuário, o domínio da chave e um token de desafio.
+
+Terminais de registro :
 

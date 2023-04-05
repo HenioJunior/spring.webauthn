@@ -1,5 +1,9 @@
-package com.spring.authn;
+package com.spring.webauthn.web;
 
+import com.spring.webauthn.authenticator.Authenticator;
+import com.spring.webauthn.authenticator.AuthenticatorRepository;
+import com.spring.webauthn.user.AppUser;
+import com.spring.webauthn.user.UserRepository;
 import com.yubico.webauthn.CredentialRepository;
 import com.yubico.webauthn.RegisteredCredential;
 import com.yubico.webauthn.data.ByteArray;
@@ -70,5 +74,13 @@ public class RegistrationService implements CredentialRepository {
                                 .signatureCount(credential.getCount())
                                 .build())
                 .collect(Collectors.toSet());
+    }
+
+    public UserRepository getUserRepo() {
+        return userRepo;
+    }
+
+    public AuthenticatorRepository getAuthRepository() {
+        return authRepository;
     }
 }

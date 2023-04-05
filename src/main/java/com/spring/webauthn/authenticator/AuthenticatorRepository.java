@@ -1,5 +1,6 @@
-package com.spring.authn;
+package com.spring.webauthn.authenticator;
 
+import com.spring.webauthn.user.AppUser;
 import com.yubico.webauthn.data.ByteArray;
 import org.springframework.data.repository.CrudRepository;
 
