@@ -213,7 +213,18 @@ Nesse ponto, o servidor usará o objeto retornado por essa função de pesquisa 
 De maneira semelhante, a função `lookupAll()` retorna um conjunto de objetos do tipo `RegisteredCredential`.</br>
 Em vez de validar a assinatura do autenticador, esta função garante que não existam várias credenciais cadastradas com o mesmo ID de credencial.
 
+Yubico fornece um objeto `RelyingParty` que é responsável por lidar com todas as solicitações de autenticação no servidor.</br>
+O aplicativo constrói e fornece esse objeto a todos os controladores. Como as credenciais do WebAuthn têm como escopo apenas um site, o nome do host, a origem e um nome de exibição do site são fornecidos pela parte confiável.
 
+Na classe AppApplication defina o bean RelyingParty;</br>
 
+#### controladores de autenticação
 
+O controlador da web para o aplicativo cria rotas e constrói os dados necessários para o cliente fazer solicitações de API WebAuthn :
+
+- Construindo strings JSON usadas nas cerimônias de registro e autenticação.
+- Cache de informações intermediárias necessárias para a execução segura de uma cerimônia (o desafio nonce).
+- Passando informações da cerimônia de criação da credencial do navegador para as classes de armazenamento de dados.
+
+Crie uma AuthControllerclasse:
 
