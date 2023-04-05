@@ -34,8 +34,9 @@ public class RegistrationService implements CredentialRepository {
     }
 
     @Override
-    public Optional<ByteArray> getUserHandleForUsername(String s) {
-        return Optional.empty();
+    public Optional<ByteArray> getUserHandleForUsername(String username) {
+        AppUser user = userRepo.findByUsername(username);
+        return Optional.of(user.getHandle());
     }
 
     @Override

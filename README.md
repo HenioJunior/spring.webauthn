@@ -198,5 +198,8 @@ A classe `RegistrationService` do aplicativo de demonstração substitui as cinc
 A função `getCredentialIdsForUsername()` é usada durante o registro da credencial. Qualquer ID de credencial associado armazenado no banco de dados é retornado como um conjunto de objetos do tipo `PublicKeyCredentialDescriptor`.</br>
 Essa lista de IDs de credenciais existentes é passada para a API WebAuthn como uma lista de credenciais excluídas para evitar que a mesma credencial seja registrada duas vezes.
 
+A função `getUserHandleForUsername()` é chamada durante a autenticação de credencial quando o usuário fornece um nome de usuário. O autenticador procura as credenciais geradas com a ajuda da matriz de bytes de manipulação do usuário, que o servidor precisa armazenar para essa finalidade.</br>
+O aplicativo de demonstração usa essa função para procurar o identificador do usuário que é passado para a navigator.credential.get()função no navegador.
+
 
 
