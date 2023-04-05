@@ -46,12 +46,29 @@ public class RegistrationService implements CredentialRepository {
     }
 
     @Override
-    public Optional<RegisteredCredential> lookup(ByteArray byteArray, ByteArray byteArray1) {
-        return Optional.empty();
+    public Optional<RegisteredCredential> lookup(ByteArray credentialId, ByteArray userHandle) {
+        Optional<Authenticator> auth = authRepository.findByCredentialId(credentialId);
+        return auth.map(credential ->
+                RegisteredCredential.builder()
+                        .credentialId(credential.getCredentialId())
+                        .userHandle(credential.getUser().getHandle())
+                        .publicKeyCose(credential.getPublicKey())
+                        .signatureCount(credential.getCount())
+                        .build()
+        );
     }
 
     @Override
-    public Set<RegisteredCredential> lookupAll(ByteArray byteArray) {
-        return null;
+    public Set<RegisteredCredential> lookupAll(ByteArray credentialId) {
+        List<Authenticator> auth = authRepository.findAllByCredentialId(credentialId);
+        return auth.stream()
+                .map(credential ->
+                        RegisteredCredential.builder()
+                                .credentialId(credential.getCredentialId())
+                                .userHandle(credential.getUser().getHandle())
+                                .publicKeyCose(credential.getPublicKey())
+                                .signatureCount(credential.getCount())
+                                .build())
+                .collect(Collectors.toSet());
     }
 }

@@ -206,5 +206,14 @@ A função `getUsernameForUserHandle()` permite que os aplicativos manipulem log
 O servidor organiza e reconhece os usuários por meio de nomes de usuário, mas apenas identificadores de usuário são necessários para o funcionamento da API WebAuthn.</br>
 A função pode ser usado em fluxos de login que não exigem nomes de usuário antecipadamente. Hipoteticamente, um aplicativo poderia dispensar totalmente os nomes de usuário e identificar os usuários exclusivamente por identificadores de matriz de bytes exclusivos, embora este aplicativo não explore essa possibilidade.
 
+A função `lookup()` está ativa durante a etapa final de verificação de credencial. Um autenticador registrado fornece uma assinatura de asserção e um ID de credencial para a API WebAuthn do navegador, que é enviada ao servidor.</br>
+O servidor procura uma credencial armazenada usando o ID da credencial e o identificador do usuário fornecidos pelo autenticador.</br>
+Nesse ponto, o servidor usará o objeto retornado por essa função de pesquisa para validar a assinatura de asserção (e, opcionalmente, a contagem de assinaturas) do autenticador.
+
+De maneira semelhante, a função `lookupAll()` retorna um conjunto de objetos do tipo `RegisteredCredential`.</br>
+Em vez de validar a assinatura do autenticador, esta função garante que não existam várias credenciais cadastradas com o mesmo ID de credencial.
+
+
+
 
 
