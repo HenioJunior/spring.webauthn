@@ -181,11 +181,22 @@ public Authenticator(RegistrationResult result,
 Crie outro `CrudRepository`para gerenciar os objetos do tipo Authenticator.
 
 
-### Propriedades do aplicativo
+#### Propriedades do aplicativo
 
 Crie um bean de configuração para armazenar as propriedades do aplicativo:
 
 Adicione configuração para localhost no seu `src/main/resources/application.properties`:
+
+
+### Implementando a biblioteca do servidor WebAuthn
+
+Agora que as classes de dados existem, a próxima etapa é criar classes que recuperem e armazenem dados da API WebAuthn. O Yubico fornece a `CredentialRepositoryinterface` para lidar com o armazenamento e pesquisa de credenciais.</br>
+A classe `RegistrationService` do aplicativo de demonstração substitui as cinco funções necessárias para o funcionamento da interface.
+
+#### interface de dados
+
+A função `getCredentialIdsForUsername()` é usada durante o registro da credencial. Qualquer ID de credencial associado armazenado no banco de dados é retornado como um conjunto de objetos do tipo `PublicKeyCredentialDescriptor`.</br>
+Essa lista de IDs de credenciais existentes é passada para a API WebAuthn como uma lista de credenciais excluídas para evitar que a mesma credencial seja registrada duas vezes.
 
 
 
