@@ -1,4 +1,4 @@
-### Construindo um aplicativo WebAuthn com Spring
+## Construindo um aplicativo WebAuthn com Spring
 
 Adicione a dependência do servidor Yubico WebAuthn
 
@@ -10,21 +10,22 @@ Adicione a dependência do servidor Yubico WebAuthn
 </dependency>
 ```
 
-#### Visão geral da camada de dados Spring JPA
+## Visão geral da camada de dados Spring JPA
 
-O aplicativo armazena duas classes de objetos de dados: usuários e credenciais.</br>
+O aplicativo armazena dois objetos de dados: usuários e credenciais.</br>
 Os usuários são pessoas que usam o sistema e podem ter várias credenciais.</br> 
 As credenciais contêm as informações necessárias para identificar e verificar um dispositivo implementando o protocolo Client to Authenticator (CTAP2).</br>
 
  CTAP2 é uma especificação que descreve a comunicação entre um autenticador de roaming e outro cliente/plataforma na camada de aplicativo, bem como ligações a uma variedade de protocolos de transporte que usam diferentes mídias físicas.
 
-#### Dados do usuário
+### Dados do usuário
+
 Existem dois objetivos para os dados do usuário: rastrear a existência e exclusividade do usuário e suas credenciais e permitir a criação de dois objetos JavaScript para o navegador fazer solicitações da API WebAuthn: 
 
 Para registro: `PublicKeyCredentialCreationOptions`</br>
 para autenticação: `PublicKeyCredentialRequestOptions`</br> 
 
-Pesquisar:
+Pesquisar:</br>
 https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialRequestOptions
 https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create
 
@@ -54,10 +55,13 @@ public class AppUser {
 }
 ```
 
-O campo de nome de usuário é definido pelo usuário. Destina-se a ser exibido por elementos de interface do usuário no cliente como parte do processo de registro e autenticação, mas também é totalmente opcional no processo WebAuthn. </br>
-De acordo com a Especificação WebAuthn , uma sequência de apelidos como username não é adequada para identificação, portanto, as solicitações de identidade WebAuthn são feitas usando um identificador de usuário, uma sequência de bytes com comprimento máximo de 64.
+O campo `username` é definido pelo usuário. Destina-se a ser exibido por elementos de interface do usuário no cliente como parte do processo de registro e autenticação, mas também é totalmente opcional no processo WebAuthn. </br>
+</br>
+As solicitações de identidade WebAuthn são feitas usando um identificador de usuário, uma sequência de bytes com comprimento máximo de 64.
 
-Os dados de byte (como o identificador do usuário) são armazenados no banco de dados como um objeto binário grande (BLOB). Para converter esses campos de dados no ByteArrayobjeto que o aplicativo usa, o aplicativo implementa a classe `AttributeConverter` JPA com a anotação `Converter`.
+Os dados de byte (como o identificador do usuário) são armazenados no banco de dados como um objeto binário grande (BLOB).</br>
+
+Para converter esses campos de dados no ByteArrayobjeto que o aplicativo usa, a classe `ByteArrayAttributeConverter` implementa a interface `AttributeConverter` com a anotação `Converter`.
 
 ```java
 @Converter(autoApply = true)
@@ -75,7 +79,8 @@ public class ByteArrayAttributeConverter implements AttributeConverter<ByteArray
 }
 ```
 
-O aplicativo converte classes de dados em objetos Java fornecidos pela biblioteca `Yubico` que podem produzir strings formatadas em JSON que o cliente passará para a API WebAuthn.</br>
+Na classe `AppUser`
+
 A função `toUserIdentity()` converte a classe de dados `AuthUser` em um objeto `UserIdentity` que pode acessar o nome de usuário, o nome da tela e o importantíssimo identificador de usuário.
 
 ```java
@@ -96,13 +101,13 @@ public UserIdentity toUserIdentity() {
 
 Crie um Spring Data CrudRepository para gerenciar os objetos AppUser;
 
-#### Dados de credencial
+### Dados de credencial
 
 O servidor também armazena informações sobre as credenciais do usuário. Os campos `id` e `name`são usados para identificar o autenticador no lado do servidor.
 
 Para autenticar uma credencial, o servidor constrói um objeto `AssertionRequest` que contém as informações do lado do servidor sobre qualquer credencial. 
 
-O AssertionRequesté convertido em JSON e enviado para o navegador, que se transforma `PublicKeyCredentialRequestOptions` durante a cerimônia de autenticação do WebAuthn. 
+O AssertionRequest é convertido em JSON e enviado para o navegador, que se transforma `PublicKeyCredentialRequestOptions` durante a cerimônia de autenticação do WebAuthn. 
 
 Os campos obrigatórios são um credentialId, uma matriz de bytes aleatórios criada pelo autenticador que identifica o escopo de uma credencial.
 
@@ -151,7 +156,7 @@ A W3 encoraja fortemente os autenticadores a implementar um campo de contagem de
 Ao armazenar o inteiro signCount de 32 bits fornecido pelo autenticador, o servidor pode verificar quantas vezes o autenticador foi usado.
 Contagens crescentes são esperadas; se o autenticador relatar uma contagem decrescente, ele deve levantar uma bandeira vermelha.
 
-O campo aaguid é um identificador que deve ser fornecido pelos autenticadores (mas nem sempre é), que identifica o tipo de credencial utilizada.
+O campo `aaguid` é um identificador que deve ser fornecido pelos autenticadores (mas nem sempre é), que identifica o tipo de credencial utilizada.</br>
 Isso pode ser usado para verificar a marca e o modelo do autenticador. Além disso, pode ser útil para negar o acesso de autenticadores desatualizados com vulnerabilidades de segurança conhecidas.
 
 A classe de dados da credencial tem um construtor que usa o Yubico `RegistrationResulte` o objeto `AuthenticatorAttestationResponse` (convertido de JavaScript para Java), junto com um nome de usuário e um nome para a credencial.
@@ -172,3 +177,15 @@ public Authenticator(RegistrationResult result,
     this.user = user;
 }
 ```
+
+Crie outro `CrudRepository`para gerenciar os objetos do tipo Authenticator.
+
+
+### Propriedades do aplicativo
+
+Crie um bean de configuração para armazenar as propriedades do aplicativo:
+
+Adicione configuração para localhost no seu `src/main/resources/application.properties`:
+
+
+
